@@ -1,0 +1,26 @@
+# Jupyter
+.ipynb_checkpoints/
+.virtual_documents/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environments and secrets
+.env
+.venv/
+venv/
+
+# System files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Competition datasets
+/data/*.csv
+
+# Generated prediction files
+/data/output/
+
+# Competition dataset documentation
+/data/data_description.txt
