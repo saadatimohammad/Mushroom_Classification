@@ -1,3 +1,4 @@
+
 # Jupyter
 .ipynb_checkpoints/
 .virtual_documents/
@@ -16,11 +17,5 @@ venv/
 Thumbs.db
 Desktop.ini
 
-# Competition datasets
-/data/*.csv
-
-# Generated prediction files
-/data/output/
-
-# Competition dataset documentation
-/data/data_description.txt
+# Generated competition submission
+/data/output/mushroom_submission.csv

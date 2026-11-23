@@ -109,7 +109,9 @@ Mushroom Classification/
         └── mushroom_submission.csv
 ```
 
-The datasets and generated submission files are excluded from version control.
+
+The project datasets and their documentation are included in the repository. Only the generated competition submission file (`data/output/mushroom_submission.csv`) is excluded from version control.
+
 
 ## How to Run
 
@@ -131,9 +133,19 @@ The final submission file is generated in `data/output/`.
 - The model was trained on a limited set of mushroom characteristics.
 - Validation results do not guarantee equivalent performance on new data.
 - The competition evaluation identified two poisonous mushrooms incorrectly classified as edible.
-- The model is intended exclusively for educational machine learning purposes.
+- The model is intended exclusively for educational and research purposes.
 
-**Safety warning:** This model must never be used to determine whether a real mushroom is safe to eat.
+**Safety Warning:** This model must never be used to determine whether real mushrooms are safe to eat.
+
+## License and Disclaimer
+
+The original code developed for this project is licensed under the MIT License.
+
+The datasets were provided by WBS Coding School for educational purposes. The author does not claim ownership of these datasets. All rights to the datasets and third-party materials remain with their respective rights holders.
+
+The datasets are not covered by the project's MIT License.
+
+This project is provided "as is", without warranties of any kind. To the maximum extent permitted by applicable law, the author disclaims liability for any damages, losses, or consequences arising from the use of this project, its datasets, or its predictions.
 
 ## Author
 
