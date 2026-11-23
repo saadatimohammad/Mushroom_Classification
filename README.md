@@ -1,185 +1,142 @@
-# Predicting House Prices
+# Mushroom Classification
 
 ## Project Overview
 
-This project explores machine learning approaches to house price prediction using the Ames Housing dataset.
+This project develops a machine learning model to classify mushrooms as poisonous or edible based on their physical characteristics.
 
-It addresses two predictive tasks:
-
-- **Classification:** Predicting whether a house belongs to the expensive category.
-- **Regression:** Predicting the sale price of a house.
+The main objective is to minimize the number of poisonous mushrooms incorrectly classified as edible. For this reason, **recall for the poisonous class** is the primary evaluation metric.
 
 The project was developed as part of the Data Science program at WBS Coding School.
 
 ## Dataset
 
-The project uses two versions of the Ames Housing dataset, containing numerical and categorical information about residential properties in Ames, Iowa, USA.
+The dataset contains categorical features describing mushroom characteristics.
 
-| Dataset | Training Samples | Prediction Samples | Target |
-|---|---:|---:|---|
-| Classification | 1,460 | 1,459 | Expensive |
-| Regression | 1,460 | 1,459 | SalePrice |
+- **Training dataset:** 6,499 observations
+- **Test dataset:** 1,625 observations
+- **Target variable:** `poisonous`
+  - `1`: Poisonous
+  - `0`: Edible
 
-The datasets include property characteristics such as location, size, construction quality, building condition, garage capacity, and basement area.
+The predictive features are:
 
-Regression dataset source: [Kaggle - House Prices: Advanced Regression Techniques](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques)
+- `cap.shape`
+- `cap.color`
+- `bruises`
+- `stalk.color.above.ring`
+- `stalk.color.below.ring`
+- `population`
 
-The regression dataset and its accompanying documentation are not redistributed in this repository. They must be downloaded directly from Kaggle in accordance with the competition rules.
+The `Id` column is excluded from model training.
 
 ## Methodology
 
-Both notebooks follow a structured machine learning workflow:
+The machine learning workflow includes:
 
-- Exploratory data analysis
-- Data cleaning and validation
-- Domain-specific missing value handling
-- Numerical and categorical feature preprocessing
-- Feature scaling and one-hot encoding
-- Baseline model development
-- Machine learning pipelines
-- Hyperparameter tuning using GridSearchCV
-- 5-fold cross-validation
-- Model evaluation and comparison
-- Final model training and prediction
+1. Loading and exploring the dataset.
+2. Separating features and the target variable.
+3. Creating a stratified training-validation split.
+4. Establishing a baseline with a Dummy Classifier.
+5. Training and comparing Logistic Regression and Random Forest models.
+6. Encoding categorical features using One-Hot Encoding.
+7. Evaluating models using recall, precision, confusion matrices, and ROC AUC.
+8. Comparing decision thresholds using stratified cross-validation and out-of-fold predictions.
+9. Training the selected model on the complete labeled dataset.
+10. Generating predictions for the competition test dataset.
 
-Preprocessing is integrated into model pipelines to minimize the risk of data leakage.
+## Model Selection
 
-## Classification
+**Random Forest** was selected because it achieved higher recall for poisonous mushrooms than Logistic Regression on the validation dataset.
 
-**Objective:** Predict whether a residential property belongs to the expensive or non-expensive category.
+The model uses 200 decision trees and a fixed random seed for reproducibility.
 
-### Models and Results
+A decision threshold of **0.10** was selected based on out-of-fold predictions, prioritizing the identification of poisonous mushrooms while considering false-positive predictions.
 
-| Model | CV Accuracy | Test Accuracy | Test F1 Score |
-|---|---:|---:|---:|
-| Decision Tree | 94.4% | 91.1% | 0.698 |
-| K-Nearest Neighbors | 94.3% | 93.5% | 0.740 |
-| Random Forest | 95.4% | 94.9% | 0.800 |
-| Logistic Regression | 94.6% | 94.9% | 0.805 |
+## Results
 
-**Baseline Accuracy:** 85.3%
+### Validation Results
 
-**Final Model:** Logistic Regression
+At the selected decision threshold of 0.10:
 
-Logistic Regression achieved a test accuracy of 94.9% and the highest F1 score among the evaluated models.
+| Metric | Result |
+|---|---:|
+| Recall (poisonous class) | 100.00% |
+| Precision (poisonous class) | 89.25% |
+| False negatives | 0 |
+| False positives | 76 |
 
-The final model generates predictions for 1,459 properties.
+These results describe the project's validation split and should not be interpreted as guaranteed performance on unseen data.
 
-## Regression
+### Competition Results
 
-**Objective:** Predict residential property sale prices.
+The model was evaluated on a separate competition test dataset.
 
-### Models and Results
+| Metric | Result |
+|---|---:|
+| Competition score | 0.9946 |
+| Recall | 99.74% |
+| Accuracy | 94.22% |
+| Poisonous mushrooms classified as edible | 2 |
+| Edible mushrooms classified as poisonous | 92 |
 
-| Model | CV RMSLE | Test RMSLE | MAE | R² |
-|---|---:|---:|---:|---:|
-| Baseline | 0.4124 | 0.4066 | $53,560 | -0.0475 |
-| Decision Tree | 0.1863 | 0.1935 | $22,102 | 0.7263 |
-| Linear Regression | 0.1740 | 0.1723 | $18,288 | 0.7731 |
-| SGD Regression | 0.1573 | 0.1749 | $16,505 | 0.7896 |
-| Random Forest | 0.1449 | 0.1560 | $16,638 | 0.7901 |
-
-**Final Model:** Random Forest Regressor
-
-### Key Results
-
-- 61.6% reduction in RMSLE compared to the baseline.
-- 68.9% reduction in mean absolute error compared to the baseline.
-- R² score of 0.7901 on the held-out test set.
-
-The final model generates sale price predictions for 1,459 properties.
-
-## Project Structure
-
-```text
-Predicting House Prices/
-├── data/
-│   ├── classification/
-│   │   ├── data_description.txt
-│   │   ├── train.csv
-│   │   └── test.csv
-│   ├── regression/                   # Local Kaggle files
-│   │   ├── data_description.txt
-│   │   ├── train.csv
-│   │   └── test.csv
-│   └── output/                       # Generated locally
-├── House Price Classification.ipynb
-├── House Price Regression.ipynb
-├── requirements.txt
-├── .gitignore
-└── README.md
-```
-
-The regression dataset directory and generated prediction files are excluded from version control. The structure above represents the local project after dataset setup and execution.
+The competition results demonstrate strong recall but also show that the model is not error-free.
 
 ## Technologies
 
-- Python 3.11
-- NumPy
+- Python 3.11.18
 - Pandas
+- NumPy
 - Matplotlib
 - Scikit-learn
 - JupyterLab
 - Git
 
-## Installation and Usage
+## Project Structure
 
-### 1. Install Dependencies
-
-Install the required dependencies:
-
-```bash
-pip install -r requirements.txt
+```text
+Mushroom Classification/
+├── Mushroom Classification.ipynb
+├── README.md
+├── requirements.txt
+├── LICENSE.txt
+├── .gitignore
+└── data/
+    ├── train.csv
+    ├── test.csv
+    ├── data_description.txt
+    └── output/
+        ├── example_submission.csv
+        └── mushroom_submission.csv
 ```
 
-### 2. Prepare the Datasets
+The datasets and generated submission files are excluded from version control.
 
-Ensure that the classification dataset is available in `data/classification/`.
+## How to Run
 
-For the regression task:
+1. Clone the repository.
+2. Install the dependencies:
 
-1. Visit the [Kaggle competition data page](https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/data).
-2. Accept the competition rules and download the required files.
-3. Create the `data/regression/` directory.
-4. Place the following files in that directory:
-   - `train.csv`
-   - `test.csv`
-   - `data_description.txt`
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### 3. Run the Notebooks
+3. Place the required training and test datasets in the `data/` directory.
+4. Open `Mushroom Classification.ipynb` in JupyterLab or Jupyter Notebook.
+5. Run the notebook cells in order.
 
-Launch JupyterLab from the project directory:
-
-```bash
-jupyter lab
-```
-
-Open either notebook and run all cells:
-
-- `House Price Classification.ipynb`
-- `House Price Regression.ipynb`
-
-### 4. Generated Predictions
-
-Prediction files are automatically generated in the `data/output/` directory:
-
-- `submission.csv`
-- `regression_submission.csv`
-
-These files are excluded from version control.
+The final submission file is generated in `data/output/`.
 
 ## Limitations
 
-- Cross-validation scores are based on the model development and hyperparameter tuning process rather than nested cross-validation.
-- The regression notebook uses RMSLE, which differs slightly from the logarithmic RMSE metric used by the Kaggle competition.
-- The models are intended for educational purposes rather than production property valuation.
+- The model was trained on a limited set of mushroom characteristics.
+- Validation results do not guarantee equivalent performance on new data.
+- The competition evaluation identified two poisonous mushrooms incorrectly classified as edible.
+- The model is intended exclusively for educational machine learning purposes.
 
-## License
-
-The original project code is licensed under the MIT License.
-
-Third-party datasets and educational materials are excluded from this license and remain subject to their respective terms.
+**Safety warning:** This model must never be used to determine whether a real mushroom is safe to eat.
 
 ## Author
 
-Mohammad Saadati
+**Mohammad Saadati**
+
+Developed as part of the Data Science program at WBS Coding School.
